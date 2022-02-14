@@ -1,6 +1,6 @@
 # File: ciscocatalyst_connector.py
 #
-# Copyright (c) 2014-2019 Splunk Inc.
+# Copyright (c) 2014-2022 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ class CiscocatalystConnector(CiscoiosConnector):
         action_result = ActionResult()
 
         status_code, cmd_output = self._send_command(cmd_to_run, action_result)
-        if (phantom.is_fail(status_code)):
+        if phantom.is_fail(status_code):
             return status_code
 
         return phantom.APP_SUCCESS
@@ -66,47 +66,47 @@ class CiscocatalystConnector(CiscoiosConnector):
         cmd_to_run = "show ip device tracking ip {ip} | include {ip} ".format(ip=ip)
 
         status_code, cmd_output = self._send_command(cmd_to_run, action_result)
-        if (phantom.is_fail(status_code)):
-            return (action_result.get_status(), mac_addr)
+        if phantom.is_fail(status_code):
+            return action_result.get_status(), mac_addr
 
         cmd_output = self._reformat_cmd_output(cmd_output, rem_command=True, to_list=False)
 
-        if (not cmd_output):
-            if (ping_ip):
+        if not cmd_output:
+            if ping_ip:
                 # Ping the ip and call again
                 self._ping_ip(ip)
                 return self._get_mac_of_ip(ip, False, action_result)
-            return (action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_IP_MAC_NOT_FOUND), mac_addr)
+            return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_IP_MAC_NOT_FOUND), mac_addr
 
         cmd_output = cmd_output.strip()
-        if (not cmd_output):
-            if (ping_ip):
+        if not cmd_output:
+            if ping_ip:
                 # Ping the ip and call again
                 self._ping_ip(ip)
                 return self._get_mac_of_ip(ip, False, action_result)
-            return (action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_IP_MAC_NOT_FOUND), mac_addr)
+            return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_IP_MAC_NOT_FOUND), mac_addr
 
         # Output is of the following format
         #   IP Address     MAC Address   Vlan  Interface                STATE
         #   10.16.0.206     f80f.41bb.5bdb  160  GigabitEthernet0/24      ACTIVE
         ip_entry = cmd_output.split()
-        if (not ip_entry):
-            if (ping_ip):
+        if not ip_entry:
+            if ping_ip:
                 # Ping the ip and call again
                 self._ping_ip(ip)
                 return self._get_mac_of_ip(ip, False, action_result)
-            return (action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_IP_MAC_NOT_FOUND), mac_addr)
+            return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_IP_MAC_NOT_FOUND), mac_addr
 
         mac_addr = ip_entry[-4].strip()
 
-        if (not mac_addr):
-            if (ping_ip):
+        if not mac_addr:
+            if ping_ip:
                 # Ping the ip and call again
                 self._ping_ip(ip)
                 return self._get_mac_of_ip(ip, False, action_result)
-            return (action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_IP_MAC_NOT_FOUND), mac_addr)
+            return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_IP_MAC_NOT_FOUND), mac_addr
 
-        return (phantom.APP_SUCCESS, mac_addr)
+        return phantom.APP_SUCCESS, mac_addr
 
     def _set_vlan_of_mac(self, mac, param, action_result):
 
@@ -123,17 +123,17 @@ class CiscocatalystConnector(CiscoiosConnector):
         cmd_to_run = "show mac address-table address {mac_addr} | include {mac_addr} ".format(mac_addr=mac_addr)
 
         status_code, cmd_output = self._send_command(cmd_to_run, action_result)
-        if (phantom.is_fail(status_code)):
+        if phantom.is_fail(status_code):
             return action_result.get_status()
 
         cmd_output = self._reformat_cmd_output(cmd_output, rem_command=True, to_list=False)
 
-        if (not cmd_output):
+        if not cmd_output:
             return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_MAC_NOT_FOUND)
 
         cmd_output = cmd_output.strip()
 
-        if (not cmd_output):
+        if not cmd_output:
             return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_MAC_NOT_FOUND)
 
         # Output is of the following format
@@ -143,24 +143,24 @@ class CiscocatalystConnector(CiscoiosConnector):
 
         vlan_id = param[CISCOCATALYST_JSON_VLAN_ID]
 
-        if (int(curr_vlan_id) == int(vlan_id)):
+        if int(curr_vlan_id) == int(vlan_id):
             return action_result.set_status(phantom.APP_SUCCESS, CISCOCATALYST_MSG_VLAN_SAME)
 
         # Get info about the port, Notice the '<space>' after {port} that is to make sure it matches the whole word
         cmd_to_run = "show interfaces status | include {port} ".format(port=port)
 
         status_code, cmd_output = self._send_command(cmd_to_run, action_result)
-        if (phantom.is_fail(status_code)):
+        if phantom.is_fail(status_code):
             return action_result.get_status()
 
         cmd_output = self._reformat_cmd_output(cmd_output, rem_command=True, to_list=False)
 
-        if (not cmd_output):
+        if not cmd_output:
             return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_PORT_NOT_FOUND, port=port)
 
         cmd_output = cmd_output.strip()
 
-        if (not cmd_output):
+        if not cmd_output:
             return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_PORT_NOT_FOUND, port=port)
 
         # Output is of the following format
@@ -169,34 +169,34 @@ class CiscocatalystConnector(CiscoiosConnector):
         parts = cmd_output.split()
         port_vlan = parts[-4]
 
-        if (port_vlan == 'trunk'):
+        if port_vlan == 'trunk':
             modify = bool(param[CISCOCATALYST_JSON_OVERRIDE_TRUNK])
-            if (not modify):
+            if not modify:
                 return action_result.set_status(phantom.APP_SUCCESS, CISCOCATALYST_MSG_PORT_TRUNK, port=port)
 
         # First we will require to go into the configure terminal
         cmd_to_run = "configure terminal"
         status_code, cmd_output = self._send_command(cmd_to_run, action_result)
-        if (phantom.is_fail(status_code)):
-            return (action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_CMD_EXEC), cmd_output)
+        if phantom.is_fail(status_code):
+            return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_CMD_EXEC), cmd_output
 
         self.save_progress(CISCOIOS_PROG_EXECUTED_CMD, cmd_to_run)
 
         cmd_to_run = "interface {port}".format(port=port)
         status_code, cmd_output = self._send_command(cmd_to_run, action_result)
-        if (phantom.is_fail(status_code)):
-            return (action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_CMD_EXEC), cmd_output)
+        if phantom.is_fail(status_code):
+            return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_CMD_EXEC), cmd_output
 
         self.save_progress(CISCOIOS_PROG_EXECUTED_CMD, cmd_to_run)
 
         cmd_to_run = "switchport access vlan {vlan_id}".format(vlan_id=vlan_id)
         status_code, cmd_output = self._send_command(cmd_to_run, action_result)
-        if (phantom.is_fail(status_code)):
-            return (action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_CMD_EXEC), cmd_output)
+        if phantom.is_fail(status_code):
+            return action_result.set_status(phantom.APP_ERROR, CISCOCATALYST_ERR_CMD_EXEC), cmd_output
 
         if phantom.is_fail(self._get_cmd_output_status(cmd_output)):
             action_result.set_status(phantom.APP_ERROR)
-            if (cmd_output):
+            if cmd_output:
                 action_result.append_to_message(CISCOCATALYST_MSG_FROM_DEVICE)
                 action_result.append_to_message(self._reformat_cmd_output(cmd_output, rem_command=False,
                             to_list=False))
@@ -208,7 +208,7 @@ class CiscocatalystConnector(CiscoiosConnector):
 
     def _set_vlan_id(self, param, delete=False):
 
-        if (phantom.is_fail(self._connect())):
+        if phantom.is_fail(self._connect()):
             return self.get_status()
 
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -216,9 +216,9 @@ class CiscocatalystConnector(CiscoiosConnector):
         endpoint = param[CISCOCATALYST_JSON_IP_MAC]
         ping_ip = param.get(CISCOCATALYST_JSON_PING_IP, True)
         mac = endpoint
-        if (phantom.is_ip(endpoint)):
+        if phantom.is_ip(endpoint):
             (ret_val, mac) = self._get_mac_of_ip(endpoint, ping_ip, action_result)
-            if (mac is None):
+            if mac is None:
                 return action_result.get_status()
 
         action_result.update_summary({CISCOCATALYST_JSON_MAC_ADDRESS: mac})
@@ -237,16 +237,17 @@ class CiscocatalystConnector(CiscoiosConnector):
         action = self.get_action_identifier()
 
         # Now each individual actions
-        if (action == self.ACTION_ID_GET_CONFIG):
+        if action == self.ACTION_ID_GET_CONFIG:
             self._get_config()
-        elif (action == self.ACTION_ID_GET_VERSION):
+        elif action == self.ACTION_ID_GET_VERSION:
             self._get_version()
-        elif (action == self.ACTION_ID_SET_VLAN_ID):
+        elif action == self.ACTION_ID_SET_VLAN_ID:
             self._set_vlan_id(param)
-        elif (action == phantom.ACTION_ID_TEST_ASSET_CONNECTIVITY):
+        elif action == phantom.ACTION_ID_TEST_ASSET_CONNECTIVITY:
             self._test_asset_connectivity(param)
 
         return self.get_status()
+
 
 if __name__ == '__main__':
 
