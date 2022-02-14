@@ -16,9 +16,9 @@
 #
 # Phantom imports
 import phantom.app as phantom
+from phantom.action_result import ActionResult
 from phantom.ciscoios_connector import CiscoiosConnector
 from phantom.ciscoios_consts import *
-from phantom.action_result import ActionResult
 
 # THIS Connector imports
 from ciscocatalyst_consts import *
@@ -252,8 +252,9 @@ class CiscocatalystConnector(CiscoiosConnector):
 if __name__ == '__main__':
 
     import sys
-    import simplejson as json
+
     import pudb
+    import simplejson as json
 
     pudb.set_trace()
 
