@@ -1,18 +1,18 @@
 [comment]: # "Auto-generated SOAR connector documentation"
 # Cisco Catalyst
 
-Publisher: Splunk  
-Connector Version: 1\.2\.15  
+Publisher: Splunk Community  
+Connector Version: 2\.0\.0  
 Product Vendor: Cisco Systems  
 Product Name: Cisco Catalyst  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 4\.5\.15922  
+Minimum Product Version: 5\.1\.0  
 
-This app supports containment actions like 'set system vlan' in addition to investigative actions like 'get config' and 'get version' on a Cisco Catalyst switch\.
+This app supports containment actions like 'set system vlan' in addition to investigative actions like 'get config' and 'get version' on a Cisco Catalyst switch
 
 [comment]: # " "
-[comment]: # "    File: readme.md"
-[comment]: # "    Copyright (c) 2014-2019 Splunk Inc."
+[comment]: # "    File: README.md"
+[comment]: # "    Copyright (c) 2014-2022 Splunk Inc."
 [comment]: # ""
 [comment]: # "    Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)"
 [comment]: # ""
@@ -32,13 +32,13 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **enable\_password** |  required  | password | Password used to enter the 'enable' mode
 
 ### Supported Actions  
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity\. This action runs a few commands on the device to check the connection and credentials\.  
-[get config](#action-get-config) - Gets the current running config of the device\.  
-[get version](#action-get-version) - Gets the software version information of the device\.  
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity\. This action runs a few commands on the device to check the connection and credentials  
+[get config](#action-get-config) - Gets the current running config of the device  
+[get version](#action-get-version) - Gets the software version information of the device  
 [vlan host](#action-vlan-host) - Set the vlan of the port on which the host is connected  
 
 ## action: 'test connectivity'
-Validate the asset configuration for connectivity\. This action runs a few commands on the device to check the connection and credentials\.
+Validate the asset configuration for connectivity\. This action runs a few commands on the device to check the connection and credentials
 
 Type: **test**  
 Read only: **True**
@@ -50,7 +50,7 @@ No parameters are required for this action
 No Output  
 
 ## action: 'get config'
-Gets the current running config of the device\.
+Gets the current running config of the device
 
 Type: **investigate**  
 Read only: **True**
@@ -69,7 +69,7 @@ summary\.total\_objects | numeric |
 summary\.total\_objects\_successful | numeric |   
 
 ## action: 'get version'
-Gets the software version information of the device\.
+Gets the software version information of the device
 
 Type: **investigate**  
 Read only: **True**
@@ -101,7 +101,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **ip\_macaddress** |  required  | MAC or IP address of device to query | string |  `mac address`  `ip` 
 **ping\_ip** |  optional  | Ping IP if not found on device | boolean | 
 **vlan\_id** |  required  | VLAN Id | numeric | 
-**override\_trunk** |  required  | Set VLAN even if port is a trunk port | boolean | 
+**override\_trunk** |  optional  | Set VLAN even if port is a trunk port | boolean | 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
