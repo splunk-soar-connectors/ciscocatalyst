@@ -1,19 +1,22 @@
 {
     "appid": "5cb9cf0e-064a-4cd7-ba2d-98b426bb21e0",
     "name": "Cisco Catalyst",
-    "description": "This app supports containment actions like 'set system vlan' in addition to investigative actions like 'get config' and 'get version' on a Cisco Catalyst switch.",
+    "description": "This app supports containment actions like 'set system vlan' in addition to investigative actions like 'get config' and 'get version' on a Cisco Catalyst switch",
     "type": "firewall",
-    "publisher": "Splunk",
-    "main_module": "ciscocatalyst_connector.pyc",
-    "app_version": "1.2.16",
+    "publisher": "Splunk Community",
+    "main_module": "ciscocatalyst_connector.py",
+    "app_version": "2.0.0",
+    "python_version": "2.7",
     "utctime_updated": "2022-01-07T20:43:43.000000Z",
     "package_name": "phantom_ciscocatalyst",
     "product_vendor": "Cisco Systems",
     "product_name": "Cisco Catalyst",
     "product_version_regex": ".*",
-    "min_phantom_version": "4.5.15922",
-    "logo": "cisco.png",
-    "license": "Copyright (c) 2014-2019 Splunk Inc.",
+    "min_phantom_version": "5.1.0",
+    "fips_compliant": false,
+    "logo": "logo_ciscocatalyst.svg",
+    "logo_dark": "logo_ciscocatalyst_dark.svg",
+    "license": "Copyright (c) 2014-2022 Splunk Inc.",
     "configuration": {
         "device": {
             "data_type": "string",
@@ -43,7 +46,7 @@
     "actions": [
         {
             "action": "test connectivity",
-            "description": "Validate the asset configuration for connectivity. This action runs a few commands on the device to check the connection and credentials.",
+            "description": "Validate the asset configuration for connectivity. This action runs a few commands on the device to check the connection and credentials",
             "type": "test",
             "identifier": "test_asset_connectivity",
             "read_only": true,
@@ -53,7 +56,7 @@
         },
         {
             "action": "get config",
-            "description": "Gets the current running config of the device.",
+            "description": "Gets the current running config of the device",
             "type": "investigate",
             "identifier": "get_config",
             "read_only": true,
@@ -61,7 +64,11 @@
             "output": [
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -88,7 +95,7 @@
         },
         {
             "action": "get version",
-            "description": "Gets the software version information of the device.",
+            "description": "Gets the software version information of the device",
             "type": "investigate",
             "identifier": "get_version",
             "read_only": true,
@@ -96,7 +103,11 @@
             "output": [
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -144,8 +155,7 @@
                     "description": "Ping IP if not found on device",
                     "data_type": "boolean",
                     "order": 1,
-                    "default": false,
-                    "required": false
+                    "default": false
                 },
                 "vlan_id": {
                     "description": "VLAN Id",
@@ -157,14 +167,17 @@
                     "description": "Set VLAN even if port is a trunk port",
                     "data_type": "boolean",
                     "order": 3,
-                    "default": false,
-                    "required": true
+                    "default": false
                 }
             },
             "output": [
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.override_trunk",
